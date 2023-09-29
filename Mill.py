@@ -1,15 +1,19 @@
 # Import the necessary module for colored text
 from termcolor import colored
+#import HelperFunctions
+
+import AI as ai
+import HelperFunctions as helper
 
 # Define the dimensions of the board
-board_size = 7
+board_size = helper.get_board_size()
 
 max_turns = 300
 max_pieces = 4
 
 player_piece = 'p'
 ai_piece = 'a'
-open_piece = 'o'
+open_piece = helper.get_open_piece()
 
 # Initialize an empty board
 board = [[open_piece for _ in range(board_size)] for _ in range(board_size)]
@@ -38,10 +42,6 @@ def print_board(board):
                 print(cell, end=' ')
         print()
 
-# Check if a move is valid
-def is_valid_placement(row, col, board, marked_pieces):
-    return board[row][col] == open_piece and not (row, col) in marked_pieces
-
 # Place a piece on the board
 def place_piece(row, col, piece, board):
     board[row][col] = piece
@@ -63,43 +63,6 @@ def move_piece(old_row, old_col, new_row, new_col, board):
     if ((old_row, old_col) in marked_pieces):
         break_mill(old_row, old_col)
 
-# Find a vertical line of pieces
-def find_vertical_line(board, row, col, piece):
-    vertical_line = set([(row, col)])
-    i = row+1
-    while (i < board_size):
-        if (board[i][col] == piece and not (i, col) in marked_pieces):
-            vertical_line.add((i, col))
-            i = i + 1
-        else:
-            break
-    i = row-1
-    while (i >= 0):
-        if (board[i][col] == piece and not (i, col) in marked_pieces):
-            vertical_line.add((i, col))
-            i = i - 1
-        else:
-            break
-    return vertical_line
-
-# Find a horizontal line of pieces
-def find_horizontal_line(board, row, col, piece):
-    horizontal_line = set([(row, col)])
-    i = col+1
-    while (i < board_size):
-        if (board[row][i] == piece and not (row, i) in marked_pieces):
-            horizontal_line.add((row, i))
-            i = i + 1
-        else:
-            break
-    i = col-1
-    while (i >= 0):
-        if (board[row][i] == piece and not (row, i) in marked_pieces):
-            horizontal_line.add((row, i))
-            i = i - 1
-        else:
-            break
-    return horizontal_line
 
 # Count the number of a specific piece on the board
 def count_pieces(board, piece):
@@ -112,8 +75,8 @@ def count_pieces(board, piece):
 
 # Check for a mill for one specific piece
 def check_for_mill(board, row, col, piece):
-    vertical_line = find_vertical_line(board, row, col, piece)
-    horizontal_line = find_horizontal_line(board, row, col, piece)
+    vertical_line = helper.find_vertical_line(board, row, col, piece, marked_pieces)
+    horizontal_line = helper.find_horizontal_line(board, row, col, piece, marked_pieces)
     if (len(vertical_line) > 2):
         marked_pieces.extend(vertical_line)
         mills.append(vertical_line)
@@ -159,7 +122,7 @@ def player_placement(board, piece):
         try:
             row = int(input("Enter row (0-6): "))
             col = int(input("Enter column (0-6): "))
-            if 0 <= row < board_size and 0 <= col < board_size and is_valid_placement(row, col, board, marked_pieces):
+            if 0 <= row < board_size and 0 <= col < board_size and helper.is_valid_placement(row, col, board, marked_pieces):
                 place_piece(row, col, piece, board)
                 check_for_mill(board, row, col, piece)
                 break
@@ -171,14 +134,11 @@ def player_placement(board, piece):
 
 # AI move in Placement phase
 def ai_placement(board, piece):
-    player_placement(board, piece)
+    #player_placement(board, piece)
+    place = ai.Place(board, piece, marked_pieces)
+    place_piece(place[0], place[1], piece, board)
+    check_for_mill(board, place[0], place[1], piece)
 
-# Determine if a move is valid
-def is_valid_move(row, col, board, marked_pieces, old_row, old_col):
-    length = abs(row - old_row) + abs(col - old_col)
-    if (length != 1):
-        return False
-    return is_valid_placement(row, col, board, marked_pieces)
 
 # Player move in Moving phase
 def player_movement(board, piece, func):
@@ -214,12 +174,17 @@ def player_movement(board, piece, func):
 # AI move in Moving phase
 def ai_movement(board, piece):
     # TODO
+    move = ai.Move(board, piece, marked_pieces)
+    old = move[0]
+    new = move[1]
+    move_piece(old[0], old[1], new[0], new[1], board)
+    check_for_mill(board, new[0], new[1], piece)
     return
     player_movement(board, piece, is_valid_move)
 
 # Player move in Flying phase
 def player_fly(board, piece):
-    player_movement(board, piece, is_valid_placement)
+    player_movement(board, piece, helper.is_valid_placement)
     return
 
 # AI move in Flying phase
@@ -248,7 +213,7 @@ def main():
         elif (count_pieces(board, player_piece) == 3):
             player_fly(board, player_piece)
         else:
-            player_movement(board, player_piece, is_valid_move)
+            player_movement(board, player_piece, helper.is_valid_move)
 
         print("AI's turn (", ai_piece, ")")
         if (count_pieces(board, ai_piece) == 2):
@@ -264,21 +229,3 @@ def main():
 
 main()
 
-def find_legal_placements(board, piece, marked_pieces):
-    legals = []
-    for n in range(0, board_size):
-        for m in range(0, board_size):
-            if (is_valid_placement(n, m, board, marked_pieces)):
-                legals.append((n, m))
-    return legals
-
-def find_legal_movements(board, piece, marked_pieces):
-    legals = []
-    for n in range(0, board_size):
-        for m in range(0, board_size):
-            if (board[n][m] == piece):
-                for row in range(0, board_size):
-                    for col in range(0, board_size):
-                        if (is_valid_move(row, col, board, marked_pieces, n, m)):
-                            legals.append(((n, m),(row, col)))
-    return legals
