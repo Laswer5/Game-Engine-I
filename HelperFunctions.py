@@ -88,3 +88,14 @@ def find_legal_movements(board, piece, marked_pieces):
                         if (is_valid_move(row, col, board, marked_pieces, n, m)):
                             legals.append(((n, m),(row, col)))
     return legals
+
+def find_legal_flys(board, piece, marked_pieces):
+    legals = []
+    for n in range(0, board_size):
+        for m in range(0, board_size):
+            if (board[n][m] == piece):
+                for row in range(0, board_size):
+                    for col in range(0, board_size):
+                        if (is_valid_placement(row, col, board, marked_pieces)):
+                            legals.append(((n, m),(row, col)))
+    return legals

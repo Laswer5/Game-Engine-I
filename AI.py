@@ -38,7 +38,9 @@ def EasyMove(board, piece, marked_pieces):
     place = legal_places[random.randint(0, len(legal_places)) - 1]
     return place
 def EasyFly(board, piece, marked_pieces):
-    return
+    legal_flys = HelperFunctions.find_legal_flys(board, piece, marked_pieces)
+    fly = legal_flys[random.randint(0, len(legal_flys)) - 1]
+    return fly
 
 def EasyMill():
     return

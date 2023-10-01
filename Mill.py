@@ -173,14 +173,12 @@ def player_movement(board, piece, func):
 
 # AI move in Moving phase
 def ai_movement(board, piece):
-    # TODO
     move = ai.Move(board, piece, marked_pieces)
     old = move[0]
     new = move[1]
     move_piece(old[0], old[1], new[0], new[1], board)
     check_for_mill(board, new[0], new[1], piece)
     return
-    player_movement(board, piece, is_valid_move)
 
 # Player move in Flying phase
 def player_fly(board, piece):
@@ -189,9 +187,12 @@ def player_fly(board, piece):
 
 # AI move in Flying phase
 def ai_fly(board, piece):
-    # TODO
+    fly = ai.Fly(board, piece, marked_pieces)
+    old = fly[0]
+    new = fly[1]
+    move_piece(old[0], old[1], new[0], new[1], board)
+    check_for_mill(board, new[0], new[1], piece)
     return
-    player_fly(board, piece)
 
 def main():
 
