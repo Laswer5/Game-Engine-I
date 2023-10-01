@@ -12,7 +12,9 @@ def get_open_piece():
 # Check if a placement is valid
 # Returns true if the row and column is open and it is not a part of a mill
 def is_valid_placement(row, col, board, marked_pieces):
-    return board[row][col] == open_piece and not (row, col) in marked_pieces
+    if (board[row][col] == open_piece and (row, col) in marked_pieces):
+        print("ERROR: Open piece is marked")
+    return board[row][col] == open_piece# and not (row, col) in marked_pieces
 
 # Determine if a move is valid
 # Returns true if the length of the move is one, meaning that the new spot is either just to the left, right, under or above the old spot, and the new spot is opened and not part of a mill
@@ -22,6 +24,7 @@ def is_valid_move(row, col, board, marked_pieces, old_row, old_col):
         return False
     return is_valid_placement(row, col, board, marked_pieces)
 
+# Find every coordinate where there is a piece with the same char as 'piece'
 def find_placed_pieces(board, piece, marked_pieces):
     pieces = []
     for i in range(0,(get_board_size()-1)):

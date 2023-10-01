@@ -110,9 +110,11 @@ def remove_opponents_piece(board, piece):
         if (count_pieces(board, player_piece) == 0):
             print("AI created a mill, but there are no pieces to remove.")
             return
-        print("AI created a mill, remove Player's piece.")
-        # TODO
-    
+        print("AI created a mill.")
+        toRemove = ai.AiRemove(board, player_piece, marked_pieces)
+        if (toRemove != 0):
+            place_piece(toRemove[0], toRemove[1], open_piece, board)
+            print("AI removed piece at: (", toRemove[0], ",", toRemove[1], ")")
     return
 
 # Player move in Placement phase
@@ -180,9 +182,13 @@ def ai_movement(board, piece):
     check_for_mill(board, new[0], new[1], piece)
     return
 
+# Helper function to send into player_movement
+def _is_valid_placement(new_row, new_col, board, marked_pieces, old_row, old_col):
+    return helper.is_valid_placement(new_row, new_col, board, marked_pieces)
+
 # Player move in Flying phase
 def player_fly(board, piece):
-    player_movement(board, piece, helper.is_valid_placement)
+    player_movement(board, piece, _is_valid_placement)
     return
 
 # AI move in Flying phase
