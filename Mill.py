@@ -69,6 +69,15 @@ def count_pieces(board, piece):
     i = 0
     for n in range(0, board_size):
         for m in range(0, board_size):
+            if (board[n][m] == piece):
+                i = i + 1
+    return i
+
+# Count the number of a specific piece on the board that is not part of a mill
+def count_pieces_not_in_mill(board, piece):
+    i = 0
+    for n in range(0, board_size):
+        for m in range(0, board_size):
             if (board[n][m] == piece and not (n, m) in marked_pieces):
                 i = i + 1
     return i
@@ -89,7 +98,7 @@ def check_for_mill(board, row, col, piece):
 # Remove an opponents piece
 def remove_opponents_piece(board, piece):
     if (piece == player_piece):
-        if (count_pieces(board, ai_piece) == 0):
+        if (count_pieces_not_in_mill(board, ai_piece) == 0):
             print("Player created a mill, but there are no pieces to remove.")
             return
         print("Player created a mill, remove AI's piece.")
@@ -107,7 +116,7 @@ def remove_opponents_piece(board, piece):
                 print("Invalid input. Please enter a number.")
         return
     elif (piece == ai_piece):
-        if (count_pieces(board, player_piece) == 0):
+        if (count_pieces_not_in_mill(board, player_piece) == 0):
             print("AI created a mill, but there are no pieces to remove.")
             return
         print("AI created a mill.")
@@ -212,6 +221,7 @@ def main():
     
     # Moving and flying phase
     for i in range(max_turns):
+        #print("Marked pieces: " , marked_pieces)
         print("Turn: " , i , "/" , max_turns)
         print("Player's turn (", player_piece, ")")
         if (count_pieces(board, player_piece) == 2):

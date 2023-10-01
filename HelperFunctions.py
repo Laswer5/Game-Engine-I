@@ -73,6 +73,7 @@ def find_horizontal_line(board, row, col, piece, marked_pieces):
             break
     return horizontal_line
 
+# Find all coordinates where a placement is legal
 def find_legal_placements(board, piece, marked_pieces):
     legals = []
     for n in range(0, board_size):
@@ -81,6 +82,7 @@ def find_legal_placements(board, piece, marked_pieces):
                 legals.append((n, m))
     return legals
 
+# Find all legal moves
 def find_legal_movements(board, piece, marked_pieces):
     legals = []
     for n in range(0, board_size):
@@ -92,6 +94,7 @@ def find_legal_movements(board, piece, marked_pieces):
                             legals.append(((n, m),(row, col)))
     return legals
 
+# Find all legal flys
 def find_legal_flys(board, piece, marked_pieces):
     legals = []
     for n in range(0, board_size):
