@@ -120,7 +120,7 @@ def remove_opponents_piece(board, piece):
             print("AI created a mill, but there are no pieces to remove.")
             return
         print("AI created a mill.")
-        toRemove = ai.AiRemove(board, player_piece, marked_pieces)
+        toRemove = ai.Remove(board, player_piece, marked_pieces)
         if (toRemove != 0):
             place_piece(toRemove[0], toRemove[1], open_piece, board)
             print("AI removed piece at: (", toRemove[0], ",", toRemove[1], ")")
@@ -210,6 +210,14 @@ def ai_fly(board, piece):
     return
 
 def main():
+    # Set difficulty
+    while True:
+        try:
+            difficulty = int(input("Set difficulty (0) Easy, (1) Medium or (2) Hard: "))
+            ai.SetDifficulty(difficulty)
+            break
+        except ValueError:
+            print("Invalid input. Please enter a number.")
 
     # Placing phase
     for _ in range(max_pieces):

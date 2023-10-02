@@ -3,6 +3,12 @@ import random
 
 diff = 2
 
+# Sets the difficulty.
+# newDiff - difficulty to set to, where 0 is Easy, 1 is Medium, and 2 is Hard
+def SetDifficulty(newDiff):
+    global diff
+    diff = newDiff
+
 # Takes a board, the piece for the ai, and a list of pieces that are part of mills.
 # Returns a tuple of coordinates to place a piece
 def Place(board, piece, marked_pieces):
@@ -32,6 +38,16 @@ def Fly(board, piece, marked_pieces):
         return MediumFly(board, piece, marked_pieces)
     elif (diff == 2):
         return HardFly(board, piece, marked_pieces)
+    
+# Finds a piece from the opponent to remove.
+# Piece arg should be the player's piece
+def Remove(board, piece, marked_pieces):
+    if (diff == 0):
+        return EasyRemove(board, piece, marked_pieces)
+    elif (diff == 1):
+        return HardRemove(board, piece, marked_pieces)
+    elif (diff == 2):
+        return HardRemove(board, piece, marked_pieces)
 
 # Easy places pieces randomly
 def EasyPlace(board, piece, marked_pieces):
@@ -140,10 +156,27 @@ def MillMoveCheck(board, piece, marked_pieces, legal_places, threshhold):
 
 # Finds a piece from the opponent to remove.
 # Piece arg should be the player's piece
-def AiRemove(board, piece, marked_pieces):
+def EasyRemove(board, piece, marked_pieces):
     pieces = HelperFunctions.find_placed_pieces(board, piece, marked_pieces)
     piece_to_remove = 0
     if(len(pieces) > 0):
         piece_to_remove = pieces[random.randint(0, (len(pieces)-1))]
     return piece_to_remove
     
+# Finds a piece from the opponent to remove, prioritizing pieces that are part of a pair.
+# Piece arg should be the player's piece
+def HardRemove(board, piece, marked_pieces):
+    pieces = HelperFunctions.find_placed_pieces(board, piece, marked_pieces)
+    for n in range(0, len(pieces)-1):
+        verticalMill = HelperFunctions.find_vertical_line(board, pieces[n][0], pieces[n][1], piece, marked_pieces)
+        horizontalMill = HelperFunctions.find_horizontal_line(board, pieces[n][0], pieces[n][1], piece, marked_pieces)
+        if (len(verticalMill) >= 2 or len(horizontalMill) >= 2):
+            return pieces[n]
+    # Could not find a pair, so just remove a random piece.
+    piece_to_remove = 0
+    if(len(pieces) > 0):
+        piece_to_remove = pieces[random.randint(0, (len(pieces)-1))]
+    return piece_to_remove
+        
+
+
