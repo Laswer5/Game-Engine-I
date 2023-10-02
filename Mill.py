@@ -10,7 +10,7 @@ import HelperFunctions as helper
 board_size = helper.get_board_size()
 
 max_turns = 300
-max_pieces = 4
+max_pieces = 9
 
 player_piece = 'p'
 ai_piece = 'a'

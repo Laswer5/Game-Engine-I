@@ -4,6 +4,10 @@ import random
 diff = 2
 
 # --- Public functions ---
+# Arguments for all public functions except setting difficulty are the same.
+# board - is simply the board, consisting of a two dimensional array of spaces.
+# piece - is the piece to handle, for move functions this should be the AI's piece, while the remove function takes the player's piece
+# marked_pieces - an array of coordinates on the form [(x,y), (x,y), ...] with every coordinate that is part of a mill
 
 # Sets the difficulty.
 # newDiff - difficulty to set to, where 0 is Easy, 1 is Medium, and 2 is Hard
