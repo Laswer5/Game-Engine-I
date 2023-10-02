@@ -3,15 +3,17 @@ import random
 
 diff = 2
 
+# --- Public functions ---
+
 # Sets the difficulty.
 # newDiff - difficulty to set to, where 0 is Easy, 1 is Medium, and 2 is Hard
-def SetDifficulty(newDiff):
+def AISetDifficulty(newDiff):
     global diff
     diff = newDiff
 
 # Takes a board, the piece for the ai, and a list of pieces that are part of mills.
 # Returns a tuple of coordinates to place a piece
-def Place(board, piece, marked_pieces):
+def AIPlace(board, piece, marked_pieces):
     if (diff == 0):
         return EasyPlace(board, piece, marked_pieces)
     elif (diff == 1):
@@ -21,7 +23,7 @@ def Place(board, piece, marked_pieces):
     
 # Takes a board, the piece for the ai, and a list of pieces that are part of mills.
 # Returns a ((oldx, oldy),(newx, newy)) containing coordinates to move from and coordinates to move to. Old are where to move from and new is where to move to.
-def Move(board, piece, marked_pieces):
+def AIMove(board, piece, marked_pieces):
     if (diff == 0):
         return EasyMove(board, piece, marked_pieces)
     elif (diff == 1):
@@ -31,7 +33,7 @@ def Move(board, piece, marked_pieces):
 
 # Takes a board, the piece for the ai, and a list of pieces that are part of mills.
 # Returns a ((oldx, oldy),(newx, newy)) containing coordinates to fly from and coordinates to fly to. Old are where to fly from and new is where to fly to.
-def Fly(board, piece, marked_pieces):
+def AIFly(board, piece, marked_pieces):
     if (diff == 0):
         return EasyFly(board, piece, marked_pieces)
     elif (diff == 1):
@@ -41,13 +43,17 @@ def Fly(board, piece, marked_pieces):
     
 # Finds a piece from the opponent to remove.
 # Piece arg should be the player's piece
-def Remove(board, piece, marked_pieces):
+def AIRemove(board, piece, marked_pieces):
     if (diff == 0):
         return EasyRemove(board, piece, marked_pieces)
     elif (diff == 1):
         return HardRemove(board, piece, marked_pieces)
     elif (diff == 2):
         return HardRemove(board, piece, marked_pieces)
+
+
+# --- Internal functions ---
+
 
 # Easy places pieces randomly
 def EasyPlace(board, piece, marked_pieces):

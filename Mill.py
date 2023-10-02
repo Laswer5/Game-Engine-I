@@ -1,8 +1,9 @@
 # Import the necessary module for colored text
 from termcolor import colored
-#import HelperFunctions
 
-import AI as ai
+# Import AI functions
+from AI import AISetDifficulty, AIPlace, AIMove, AIFly, AIRemove
+#import HelperFunctions
 import HelperFunctions as helper
 
 # Define the dimensions of the board
@@ -120,7 +121,7 @@ def remove_opponents_piece(board, piece):
             print("AI created a mill, but there are no pieces to remove.")
             return
         print("AI created a mill.")
-        toRemove = ai.Remove(board, player_piece, marked_pieces)
+        toRemove = AIRemove(board, player_piece, marked_pieces)
         if (toRemove != 0):
             place_piece(toRemove[0], toRemove[1], open_piece, board)
             print("AI removed piece at: (", toRemove[0], ",", toRemove[1], ")")
@@ -146,7 +147,7 @@ def player_placement(board, piece):
 # AI move in Placement phase
 def ai_placement(board, piece):
     #player_placement(board, piece)
-    place = ai.Place(board, piece, marked_pieces)
+    place = AIPlace(board, piece, marked_pieces)
     place_piece(place[0], place[1], piece, board)
     check_for_mill(board, place[0], place[1], piece)
 
@@ -184,7 +185,7 @@ def player_movement(board, piece, func):
 
 # AI move in Moving phase
 def ai_movement(board, piece):
-    move = ai.Move(board, piece, marked_pieces)
+    move = AIMove(board, piece, marked_pieces)
     old = move[0]
     new = move[1]
     move_piece(old[0], old[1], new[0], new[1], board)
@@ -202,7 +203,7 @@ def player_fly(board, piece):
 
 # AI move in Flying phase
 def ai_fly(board, piece):
-    fly = ai.Fly(board, piece, marked_pieces)
+    fly = AIFly(board, piece, marked_pieces)
     old = fly[0]
     new = fly[1]
     move_piece(old[0], old[1], new[0], new[1], board)
@@ -214,7 +215,7 @@ def main():
     while True:
         try:
             difficulty = int(input("Set difficulty (0) Easy, (1) Medium or (2) Hard: "))
-            ai.SetDifficulty(difficulty)
+            AISetDifficulty(difficulty)
             break
         except ValueError:
             print("Invalid input. Please enter a number.")
